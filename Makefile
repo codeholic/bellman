@@ -19,4 +19,4 @@ bellman: $(OBJS) bellman.o
 envelope: $(OBJS) envelope.o
 	$(CC) $(LDFLAGS) -o $@ $^ -lgd
 clean:
-	rm -f *.o mkstill bellman envelope
+	rm -f *.o mkstill bellman envelope test_universe test_readwrite test_stabilise
