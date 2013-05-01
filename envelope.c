@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]) {
 
         int c;
-        int gens;
+        int gens = 10;
 
         while((c = getopt(argc, argv, "g:")) != -1) switch(c) {
         case 'g':
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
                                         for(dx = -1; dx <= 1; dx++) for(dy = -1; dy <= 1; dy++) {
                                                 int xx = t->xpos + x + dx;
                                                 int yy = t->ypos + y + dy;
-                                                char c = generation_get_text(u->first, xx, yy);
+                                                c = generation_get_text(u->first, xx, yy);
                                                 if(c == ' ')
                                                         generation_set_text(u->first, xx, yy, '.');
                                         }

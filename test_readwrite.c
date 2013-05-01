@@ -15,4 +15,5 @@ static void test_read_cordership(void) {
 
 int main(void) {
         test_read_cordership();
+        return 0;
 }

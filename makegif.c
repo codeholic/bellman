@@ -1,6 +1,7 @@
 #include "gd.h"
 
 #include "universe.h"
+#include "readwrite.h"
 
 #define GX(x) ((x - l) * scale)
 #define GY(y) ((y - t) * scale)
@@ -34,9 +35,6 @@ void write_gif(universe *u, int gen, const char *filename) {
                 if(!(tp->flags & (IS_LIVE | HAS_UNKNOWN_CELLS))) {
                         continue;
                 }
-
-                int tx = tp->xpos - l;
-                int ty = tp->ypos - t;
 
                 gdImageFilledRectangle(im, GX(tp->xpos), GY(tp->ypos),
                                        GX(tp->xpos + TILE_WIDTH)-1, 
@@ -124,9 +122,6 @@ void write_animated_gif(universe *u, const char *filename) {
                         if(!(tp->flags & IS_LIVE)) {
                                 continue;
                         }
-
-                        int tx = tp->xpos - l;
-                        int ty = tp->ypos - t;
 
                         gdImageFilledRectangle(im, GX(tp->xpos), GY(tp->ypos),
                                                GX(tp->xpos + TILE_WIDTH)-1, 

@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[]) {
 
+        assert(argc > 1);
         universe *u = read_text(argv[1]);
 
         find_still_life(u);

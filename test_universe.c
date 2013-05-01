@@ -237,7 +237,7 @@ static void test_universe_evolve_expand(void) {
 
 static void test_universe_r_pentomino(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
 
@@ -258,7 +258,7 @@ static void test_universe_r_pentomino(void) {
 
 static void test_universe_puffer_train(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
 
@@ -302,7 +302,7 @@ static void test_universe_puffer_train(void) {
 
 static void test_universe_lwss(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
 
@@ -338,4 +338,5 @@ int main(void) {
         test_universe_r_pentomino();
         test_universe_puffer_train();
         test_universe_lwss();
+        return 0;
 }

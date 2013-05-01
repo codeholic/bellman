@@ -14,16 +14,16 @@
 static universe *u_static, *u_evolving, *u_forbidden, *u_filter;
 
 // Search space restriction parameters:
-static int first_encounter_gen = 2;
-static int last_encounter_gen = 20;
-static int repair_interval = 20;
-static int stable_interval = 5;
-static int max_live = 10;
-static int max_active = 10;
+static unsigned int first_encounter_gen = 2;
+static unsigned int last_encounter_gen = 20;
+static unsigned int repair_interval = 20;
+static unsigned int stable_interval = 5;
+static unsigned int max_live = 10;
+static unsigned int max_active = 10;
 
 // Other global values
-static int max_gens;
-static int n_live;
+static unsigned int max_gens;
+static unsigned int n_live;
 
 static int last_print_time = 0;
 
@@ -71,6 +71,8 @@ static void print_prune_counters(void) {
 static void read_cb(void *u_, char area, int gen, int x, int y, char c) {
         cellvalue vs = OFF, ve = OFF, vf = OFF;
 
+        (void)u_;
+
         if((area == 'P') && (gen == 0)) {
                 switch(c) {
                 case '.': break;
@@ -91,6 +93,8 @@ static void read_cb(void *u_, char area, int gen, int x, int y, char c) {
 }
 
 static void read_param_cb(void *u_, const char *param, int value) {
+        (void)u_;
+
         if(!strcmp(param, "first-encounter"))
                 first_encounter_gen = value;
 
@@ -171,7 +175,6 @@ static evolve_result bellman_evolve(tile *t, tile *out) {
         TILE_WORD dl_bit1, d_bit1, dr_bit1;
         TILE_WORD dl_bit0s, d_bit0s, dr_bit0s;
         TILE_WORD dl_bit1s, d_bit1s, dr_bit1s;
-        tile *tt = t;
 
         TILE_WORD interaction = 0, activity = 0, unk_succ = 0, delta_from_stable_count = 0;
         TILE_WORD delta_from_previous_count = 0;
@@ -315,7 +318,7 @@ static evolve_result bellman_evolve(tile *t, tile *out) {
 
                 // Compare against user-specified filter pattern
                 TILE_WORD filter_bit0 = filter ? filter->bit0[y] : 0;
-                TILE_WORD filter_bit1 = filter ? filter->bit1[y] : ~0;
+                TILE_WORD filter_bit1 = filter ? filter->bit1[y] : (TILE_WORD)~0;
 
                 TILE_WORD filter_diff = out->bit0[y] ^ filter_bit0;
                 filter_diff &= ~(filter_bit1 | out->bit1[y]);
@@ -387,7 +390,7 @@ static evolve_result bellman_evolve(tile *t, tile *out) {
         return out->flags;
 }
 
-static generation *bellman_evolve_generations(generation *g, int end) {
+static generation *bellman_evolve_generations(generation *g, unsigned int end) {
         tile *t;
         g->flags |= CHANGED;
 
@@ -404,10 +407,10 @@ static generation *bellman_evolve_generations(generation *g, int end) {
 
 static int dumpcount = 0;
 
-static void dump(int full, int gen_nr) {
+static void dump(int full, unsigned int gen_nr) {
 
         char name[30];
-        int i;
+        unsigned int i;
 
         printf("Dumping %d\n", dumpcount);
 
@@ -431,14 +434,14 @@ static void dump(int full, int gen_nr) {
 
 static int solcount = 0;
 
-static void bellman_found_solution(const char *type, int gens) {
+static void bellman_found_solution(const char *type, unsigned int gens) {
         solcount++;
         printf("Found solution %d type %s, gens %d\n", solcount, type, gens);
 
         char name[30];
 
         universe *utmp = universe_new(OFF);
-        int i;
+        unsigned int i;
 
         tile *t;
         for(t = u_static->first->all_first; t; t = t->all_next) {
@@ -670,8 +673,6 @@ static void bellman_recurse(universe *u, generation *g) {
         bellman_choose_cells(u, g);
 }
 
-static int tick = 0;
-
 #define TRY(cdx, cdy)                                                   \
         if(tile_get_cell(t->prev, x + cdx, y + cdy) == UNKNOWN_STABLE) { \
                 dx = cdx;                                               \
@@ -680,16 +681,7 @@ static int tick = 0;
         }
 
 static void bellman_choose_cells(universe *u, generation *g) {
-        //dump(dumpcount == 1000);
-#if 0
-        tick++;
-        if(tick == 10000) {
-                dump(0, 12);
-                tick = 0;
-        }
-#endif
         // Look for a tile with some unknown cells.
-        //dump(1, 0);
 
         g = u_evolving->first;
         
@@ -885,7 +877,8 @@ int main(int argc, char *argv[]) {
 
         universe_evolve_next(u_static);
 
-        int i, x, y;
+        unsigned int i;
+        int x, y;
         generation *g;
         tile *t, *tp;
 

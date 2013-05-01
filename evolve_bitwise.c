@@ -26,7 +26,6 @@ evolve_result tile_evolve_bitwise(tile *t, tile *out) {
         if(mid != 0) flags |= EXPAND_UP;
 
         TILE_WORD down_left, down, down_right;
-        tile *tt = t;
 
         TILE_WORD left_expand_flag = 0, right_expand_flag = 0;
         TILE_WORD any_active = 0;
@@ -48,7 +47,7 @@ evolve_result tile_evolve_bitwise(tile *t, tile *out) {
                 }
 
                 left_expand_flag |= mid & 1;
-                right_expand_flag |= mid & (((TILE_WORD)1) << TILE_WIDTH-1);
+                right_expand_flag |= mid & (((TILE_WORD)1) << (TILE_WIDTH-1));
 
                 full_adder(downtotal, down_total0, down_total1, down_left, down, down_right);
 
@@ -130,7 +129,6 @@ evolve_result tile_evolve_bitwise_3state(tile *t, tile *out) {
 
         TILE_WORD down_left, down, down_right;
         TILE_WORD down_unk_left, down_unk, down_unk_right;
-        tile *tt = t;
 
         TILE_WORD left_expand_flag = 0, right_expand_flag = 0;
         TILE_WORD any_active = 0;
@@ -160,7 +158,7 @@ evolve_result tile_evolve_bitwise_3state(tile *t, tile *out) {
                 down_right &= ~down_unk_right;
 
                 left_expand_flag |= (mid | mid_unk) & 1;
-                right_expand_flag |= (mid | mid_unk) & (((TILE_WORD)1) << TILE_WIDTH-1);
+                right_expand_flag |= (mid | mid_unk) & (((TILE_WORD)1) << (TILE_WIDTH-1));
 
                 full_adder(downtotal, down_total0, down_total1, down_left, down, down_right);
                 full_adder(downutotal, down_unk_total0, down_unk_total1, down_unk_left, down_unk, down_unk_right);
@@ -181,6 +179,7 @@ evolve_result tile_evolve_bitwise_3state(tile *t, tile *out) {
                 full_adder(t2u, neigh_unk_total1, neigh_unk_carry1, upmid_unk_total1, down_unk_total1, neigh_unk_carry0);
                 half_adder(     neigh_unk_total2, neigh_unk_total3, upmid_unk_total2, neigh_unk_carry1);
 
+                (void)neigh_total3;
 
                 // Now implement the 3-state Life rule, remembering
                 // that we've included the cell itself in the counts.
@@ -256,7 +255,7 @@ is_live |= mid & neigh_total2 & (~neigh_total1) & (~neigh_total0) & (~neigh_unk_
         if(top_delta != 0) flags |= EXPAND_UP;
         if(bottom_delta != 0) flags |= EXPAND_DOWN;
         if(all_delta & 1) flags |= EXPAND_LEFT;
-        if(all_delta & (((TILE_WORD)1) << TILE_WIDTH-1)) flags |= EXPAND_RIGHT;
+        if(all_delta & (((TILE_WORD)1) << (TILE_WIDTH-1))) flags |= EXPAND_RIGHT;
 
         return flags;
 }
@@ -293,7 +292,6 @@ evolve_result tile_stabilise_3state(tile *t, tile *out) {
 
         TILE_WORD down_left, down, down_right;
         TILE_WORD down_unk_left, down_unk, down_unk_right;
-        tile *tt = t;
 
         TILE_WORD any_active = 0, abort = 0;
         // full adders to count the live bits on each row

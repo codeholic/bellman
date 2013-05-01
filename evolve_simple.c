@@ -4,7 +4,7 @@
 // Simple evolver for testing purposes, which only handles OFF and ON
 // values, and assumes the default background value is OFF.
 
-static cellvalue tile_get_cell_wrap(tile *t, uint32_t xpos, uint32_t ypos) {
+static cellvalue tile_get_cell_wrap(tile *t, int xpos, int ypos) {
         // first check for the 4 corners
         if((xpos == -1) && (ypos == -1)) {
                 tile *t2;

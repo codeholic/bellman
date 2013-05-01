@@ -76,11 +76,10 @@ static void test_stabilise_simple(void) {
 
 static void test_stabilise_abort(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2, *t3;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
         universe_evolve_next(u);
-        t2 = universe_find_tile(u, 1, 0, 0, 1);
 
         // place a block
         tile_set_cell(t, 4, 4, ON);
@@ -94,11 +93,10 @@ static void test_stabilise_abort(void) {
 
 static void test_stabilise_abort2(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2, *t3;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
         universe_evolve_next(u);
-        t2 = universe_find_tile(u, 1, 0, 0, 1);
 
         // line of 2 cells
         tile_set_cell(t, 4, 4, ON);
@@ -111,7 +109,7 @@ static void test_stabilise_abort2(void) {
 
 static void test_find_still(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2, *t3;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
 
@@ -135,7 +133,7 @@ static void test_find_still(void) {
 
 static void test_find_still_2(void) {
         universe *u = universe_new(OFF);
-        tile *t, *t2, *t3;
+        tile *t;
 
         t = universe_find_tile(u, 0, 0, 0, 1);
 
@@ -159,7 +157,7 @@ static void test_find_still_2(void) {
 
 static void test_find_still_minimal_1(void) {
         universe *u;
-        tile *t, *t2, *t3;
+        tile *t;
 
         u = read_text("test-cases/still-minimal-1.lif");
 
@@ -179,4 +177,5 @@ int main(void) {
         test_find_still();
         test_find_still_2();
         test_find_still_minimal_1();
+        return 0;
 }

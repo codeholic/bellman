@@ -58,8 +58,8 @@ struct tile_s {
         TILE_WORD bit0[TILE_HEIGHT], bit1[TILE_HEIGHT];
         void *auxdata;
         evolve_result flags;
-        int n_active; // number of cells that differ from the stable state
-        int delta_prev; // number of cells that differ from the previous generation
+        unsigned int n_active; // number of cells that differ from the stable state
+        unsigned int delta_prev; // number of cells that differ from the previous generation
         char *text;
         tile *filter; // used by bellman
 };
@@ -74,8 +74,8 @@ struct generation_s {
         tile *xyhash[HASH_SIZE];
         tile *all_first, *all_last;
         evolve_result flags;
-        int n_active; // number of cells that differ from the stable state
-        int delta_prev; // number of cells that differ from the previous generation
+        unsigned int n_active; // number of cells that differ from the stable state
+        unsigned int delta_prev; // number of cells that differ from the previous generation
 };
 
 struct universe_s {
@@ -90,7 +90,7 @@ void universe_free(universe *);
 universe *universe_copy(universe *from, int gen);
 
 generation *universe_find_generation(universe *u, uint32_t gen, int create);
-tile *generation_find_tile(generation *g, uint32_t xpos, uint32_t ypos, int create);
+tile *generation_find_tile(generation *g, int xpos, int ypos, int create);
 
 tile *universe_find_tile(universe *u, 
                          uint32_t g, uint32_t x, uint32_t y,
@@ -104,6 +104,7 @@ void tile_set_flags(tile *t);
 void generation_set_cell(generation *g, int x, int y, cellvalue v);
 
 void universe_evolve(universe *u, uint32_t gen);
+void universe_evolve_next(universe *u);
 
 typedef evolve_result evolve_func(tile *t, tile *out);
 

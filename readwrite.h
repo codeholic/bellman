@@ -7,6 +7,7 @@ void read_life105(FILE *f,
                   void *cbdata);
 
 void write_life105(FILE *f, generation *g);
+void write_life105_text(FILE *f, generation *g);
 
 universe *read_text(const char *filename);
 

@@ -8,7 +8,6 @@
 universe *universe_new(cellvalue def) {
         universe *u = allocate(sizeof *u);
         generation *g;
-        int i;
 
         u->n_gens = 1;
         u->def = def;
@@ -38,9 +37,9 @@ static uint32_t poshash(uint32_t tx, uint32_t ty) {
         return ((2 * tx) + (3 * ty)) % HASH_SIZE;
 }
 
-tile *generation_find_tile(generation *g, uint32_t xpos, uint32_t ypos, int create) {
-        uint32_t tx = (xpos / TILE_WIDTH) * TILE_WIDTH;
-        uint32_t ty = (ypos / TILE_HEIGHT) * TILE_HEIGHT;
+tile *generation_find_tile(generation *g, int xpos, int ypos, int create) {
+        int tx = (xpos / TILE_WIDTH) * TILE_WIDTH;
+        int ty = (ypos / TILE_HEIGHT) * TILE_HEIGHT;
 
         tile *t;
         for(t = g->xyhash[poshash(tx, ty)]; t; t = t->hashnext) {
@@ -105,7 +104,6 @@ generation *universe_find_generation(universe *u, uint32_t gen, int create) {
         generation *g;
 
         assert(u);
-        assert(gen >= 0);
 
         if(create == 0) {
                 if(gen >= u->n_gens)
@@ -169,7 +167,6 @@ void generation_set_cell(generation *g, int x, int y, cellvalue v) {
 
 void universe_evolve(universe *u, uint32_t gen) {
         assert(u);
-        assert(gen >= 0);
         assert(gen < (u->n_gens - 1));
 
         generation *g;
@@ -293,7 +290,7 @@ void tile_find_bounds(tile *t, int *l, int *r, int *t_, int *b) {
                         if(y < ymin) ymin = y;
 
                         while(set) {
-                                bit = ffsll(set) - 1;
+                                bit = 1; //ffsll(set) - 1;
                                 if(bit > xmax) xmax = bit;
                                 if(bit < xmin) xmin = bit;
                                 set &= ~(((TILE_WORD)1) << bit);

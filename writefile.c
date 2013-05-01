@@ -19,6 +19,7 @@ void write_life105(FILE *f, generation *g) {
                         for(x=ll; x<=rr; x++) {
                                 char c = '.';
                                 switch(tile_get_cell(t, x, y)) {
+                                case OFF: c = '.'; break;
                                 case ON: c = '*'; break;
                                 case UNKNOWN: c = ':'; break;
                                 case UNKNOWN_STABLE: c = '?'; break;

@@ -12,7 +12,7 @@ void read_life105(FILE *f,
         char linebuff[10000];        
         char parambuff[30];
         int gen, xpos, ypos, value;
-        char area;
+        char area = 'P';
 
         while(fgets(linebuff, sizeof linebuff, f)) {
                 char *p = strchr(linebuff, '\r');
@@ -70,7 +70,6 @@ void read_life105(FILE *f,
                 } else {
                         // Process as data.
                         int x = xpos;
-                        char *p;
 
                         for(p = linebuff; *p; p++) {
                                 cb(cbdata, area, gen, x, ypos, *p);
@@ -97,8 +96,7 @@ static void life105cb(void *u_, char area, int gen, int x, int y, char c) {
 
 static void read_rle(FILE *f, universe *u) {
         char linebuff[10000];        
-        char parambuff[30];
-        int xpos = 0, ypos = 0, value;
+        int xpos = 0, ypos = 0;
 
         // read header lines
 

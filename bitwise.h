@@ -1,24 +1,24 @@
 static inline TILE_WORD get_word0_left(tile *t, int y) {
         TILE_WORD rv = t->bit0[y] << 1;
-        if(t->left) rv |= t->left->bit0[y] >> TILE_WIDTH-1;
+        if(t->left) rv |= t->left->bit0[y] >> (TILE_WIDTH-1);
         return rv;
 }
 
 static inline TILE_WORD get_word0_right(tile *t, int y) {
         TILE_WORD rv = t->bit0[y] >> 1;
-        if(t->right) rv |= t->right->bit0[y] << TILE_WIDTH-1;
+        if(t->right) rv |= t->right->bit0[y] << (TILE_WIDTH-1);
         return rv;
 }
 
 static inline TILE_WORD get_word1_left(tile *t, int y) {
         TILE_WORD rv = t->bit1[y] << 1;
-        if(t->left) rv |= t->left->bit1[y] >> TILE_WIDTH-1;
+        if(t->left) rv |= t->left->bit1[y] >> (TILE_WIDTH-1);
         return rv;
 }
 
 static inline TILE_WORD get_word1_right(tile *t, int y) {
         TILE_WORD rv = t->bit1[y] >> 1;
-        if(t->right) rv |= t->right->bit1[y] << TILE_WIDTH-1;
+        if(t->right) rv |= t->right->bit1[y] << (TILE_WIDTH-1);
         return rv;
 }
 
