@@ -6,13 +6,13 @@
 #include "universe.h"
 
 universe *universe_new(cellvalue def) {
-        universe *u = allocate(sizeof *u);
+        universe *u = (universe *)allocate(sizeof *u);
         generation *g;
 
         u->n_gens = 1;
         u->def = def;
 
-        g = allocate(sizeof *g);
+        g = (generation *)allocate(sizeof *g);
         g->u = u;
         g->gen = 0;
 
@@ -49,7 +49,7 @@ tile *generation_find_tile(generation *g, int xpos, int ypos, int create) {
 
         if(!create) return NULL;
 
-        t = allocate(sizeof *t);
+        t = (tile *)allocate(sizeof *t);
         t->xpos = tx;
         t->ypos = ty;
         uint32_t thash = poshash(tx, ty);
@@ -114,7 +114,7 @@ generation *universe_find_generation(universe *u, uint32_t gen, int create) {
         } else {
                 for(g = u->first; g->gen != gen; g = g->next) {
                         if(!g->next) {
-                                g->next = allocate(sizeof *g->next);
+                                g->next = (generation *)allocate(sizeof *g->next);
 
                                 g->next->u = g->u;
                                 u->last->next = g->next;
@@ -177,7 +177,7 @@ void universe_evolve(universe *u, uint32_t gen) {
 }
 
 void universe_evolve_next(universe *u) {
-        generation *g = allocate(sizeof *g);
+        generation *g = (generation *)allocate(sizeof *g);
 
         g->u = u;
         u->last->next = g;

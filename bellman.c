@@ -126,9 +126,9 @@ static evolve_result bellman_evolve(tile *t, tile *out) {
         // from growing and (b) check for boundary condition
         // violations.
 
-        tile *stable = t->auxdata;
+        tile *stable = (tile *)t->auxdata;
         if(!stable) return out->flags;
-        tile *forbidden = stable->auxdata;
+        tile *forbidden = (tile *)stable->auxdata;
         tile *filter = t->filter;
         tile *prev = t->prev;
 
@@ -797,7 +797,7 @@ static void bellman_choose_cells(universe *u, generation *g) {
 found:
         assert(tile_get_cell(t, x, y) == UNKNOWN);
         assert(tile_get_cell(t->prev, x+dx, y+dy) == UNKNOWN_STABLE);
-        assert(tile_get_cell(t->auxdata, x+dx, y+dy) == UNKNOWN_STABLE);
+        assert(tile_get_cell((tile *)t->auxdata, x+dx, y+dy) == UNKNOWN_STABLE);
 
         RECURSE(("Generation %d, unknown cell at (%d, %d, %d)\n",
                  g->gen, g->gen + 1, x+dx, y+dy));
@@ -816,7 +816,7 @@ found:
 #endif
         if(n_live < max_live) {
                 tile_set_cell(t->prev, x, y, ON);
-                tile_set_cell(t->auxdata, x, y, ON);
+                tile_set_cell((tile *)t->auxdata, x, y, ON);
                 g->prev->flags |= CHANGED;
                 RECURSE(("Recursing with (%d,%d) = ON\n", x, y));
                 n_live++;
@@ -828,14 +828,14 @@ found:
         }
 #if 1
         tile_set_cell(t->prev, x, y, OFF);
-        tile_set_cell(t->auxdata, x, y, OFF);
+        tile_set_cell((tile *)t->auxdata, x, y, OFF);
         g->prev->flags |= CHANGED;
 
         RECURSE(("Recursing with (%d,%d) = OFF\n", x, y));
         bellman_recurse(u, g->prev);
 #endif
         tile_set_cell(t->prev, x, y, UNKNOWN_STABLE);
-        tile_set_cell(t->auxdata, x, y, UNKNOWN_STABLE);
+        tile_set_cell((tile *)t->auxdata, x, y, UNKNOWN_STABLE);
         g->prev->flags |= CHANGED;
 }
 
@@ -912,7 +912,7 @@ int main(int argc, char *argv[]) {
         bellman_evolve_generations(u_evolving->first, max_gens);
 
         int ac_first, ac_last;
-        uint32_t class;
+        uint32_t klass;
 
         switch(mode) {
         case SEARCH:
@@ -973,9 +973,10 @@ int main(int argc, char *argv[]) {
                 // find the first active generation
                 for(g = u_evolving->first; g && !(g->flags & DIFFERS_FROM_STABLE); g = g->next)
                         ;
+                generation *g_last;
 
                 if(!g) {
-                        class = 0;
+                        klass = 0;
                         goto done;
                 }
                 ac_first = g->gen;
@@ -983,14 +984,14 @@ int main(int argc, char *argv[]) {
                         printf("First active generation: %d\n", ac_first);
 
                 // find the generation after the last active generation
-                generation *g_last = g;
+                g_last = g;
                 for(; g; g = g->next) {
                         if(g->flags & DIFFERS_FROM_STABLE)
                                 g_last = g;
                 }
 
                 if(!g_last) {
-                        class = 1;
+                        klass = 1;
                         goto done;
                 }
 
@@ -999,7 +1000,7 @@ int main(int argc, char *argv[]) {
                 if(verbose > 0)
                         printf("Last active generation: %d\n", ac_last);
 
-                class = (2 * ac_first) + (3 * ac_last);
+                klass = (2 * ac_first) + (3 * ac_last);
 
                 // The catalyst has returned to its stable state. Any
                 // remaining differences are the generated spark.
@@ -1021,10 +1022,10 @@ int main(int argc, char *argv[]) {
                                         hash = (hash ^ y) * 0xabcdef13;
                                 }
                         }
-                        class += hash;
+                        klass += hash;
                 }
         done:
-                printf("hash: %08x\n", class);
+                printf("hash: %08x\n", klass);
                 break;
         }
         return 0;

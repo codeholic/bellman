@@ -13,18 +13,20 @@
 
 #define TILE_HEIGHT 32
 
-typedef enum {
+enum {
         OFF            = 0x0,
         ON             = 0x1,
         UNKNOWN        = 0x2,
         UNKNOWN_STABLE = 0x3
-} cellvalue;
+};
+
+typedef unsigned char cellvalue;
 
 typedef struct tile_s tile;
 typedef struct generation_s generation;
 typedef struct universe_s universe;
 
-typedef enum {
+enum {
         EXPAND_UP = 0x01,
         EXPAND_LEFT = 0x02,
         EXPAND_RIGHT = 0x04,
@@ -48,7 +50,9 @@ typedef enum {
 
         FILTER_MISMATCH = 0x10000
 
-} evolve_result;
+};
+
+typedef unsigned int evolve_result;
 
 struct tile_s {
         int xpos, ypos;

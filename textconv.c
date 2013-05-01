@@ -9,7 +9,7 @@ char tile_get_text(tile *t, int x, int y) {
 
 void tile_set_text(tile *t, int x, int y, char c) {
         if(!t->text) {
-                t->text = allocate(TILE_WIDTH * TILE_HEIGHT);
+                t->text = (char *)allocate(TILE_WIDTH * TILE_HEIGHT);
                 memset(t->text, ' ', TILE_WIDTH * TILE_HEIGHT);
         }
         t->text[(y * TILE_WIDTH) + x] = c;

@@ -39,13 +39,13 @@ static void recurse(universe *u) {
                         }
                 }
 
-                struct {
-                        tile *tile;
+                struct backout {
+                        tile *tileptr;
                         int index;
                         TILE_WORD old0, old1;
                 } *backout;
 
-                backout = alloca(count * sizeof *backout);
+                backout = (struct backout *)alloca(count * sizeof *backout);
                 count = 0;
 
                 // store old values of the changed words
@@ -54,7 +54,7 @@ static void recurse(universe *u) {
                         for(i=0; i<TILE_HEIGHT; i++) {
                                 if((t->next->bit0[i] != t->bit0[i]) ||
                                    (t->next->bit1[i] != t->bit1[i])) {
-                                        backout[count].tile = t;
+                                        backout[count].tileptr = t;
                                         backout[count].index = i;
                                         backout[count].old0 = t->bit0[i];
                                         backout[count].old1 = t->bit1[i];
@@ -71,7 +71,7 @@ static void recurse(universe *u) {
 
                 // back out the changes
                 for(i=0; i<count; i++) {
-                        tile *tt = backout[i].tile;
+                        tile *tt = backout[i].tileptr;
                         tt->bit0[backout[i].index] = backout[i].old0;
                         tt->bit1[backout[i].index] = backout[i].old1;
                 }

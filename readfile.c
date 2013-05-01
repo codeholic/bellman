@@ -81,7 +81,7 @@ void read_life105(FILE *f,
 }
 
 static void life105cb(void *u_, char area, int gen, int x, int y, char c) {
-        universe *u = u_;
+        universe *u = (universe *)u_;
         cellvalue v = OFF;
         if((area == 'P') && (gen == 0)) {
                 switch(c) {
