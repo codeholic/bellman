@@ -290,7 +290,7 @@ void tile_find_bounds(tile *t, int *l, int *r, int *t_, int *b) {
                         if(y < ymin) ymin = y;
 
                         while(set) {
-                                bit = 1; //ffsll(set) - 1;
+                                bit = ffsll(set) - 1;
                                 if(bit > xmax) xmax = bit;
                                 if(bit < xmin) xmin = bit;
                                 set &= ~(((TILE_WORD)1) << bit);
