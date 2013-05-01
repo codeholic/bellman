@@ -1,0 +1,49 @@
+Bellman (alpha release)                                    Mike Playle
+=======                                                  Cambridge, UK
+                                                            April 2013
+
+
+This is my Life search program, in the state it was in when it found
+the snark reflector. Here's a very quick look at how to make it do
+something:
+
+I run it on a 64 bit Linux machine. Compiling it follows the
+conventional process of typing "make" and then fixing any errors you
+might encounter. You'll need the "gd" library for writing GIF files
+(try "libgd2-xpm-dev" on Ubuntu).
+
+Once built, this search takes a minute or two and produces 47 results:
+
+$ time ./bellman inputs/test.in 
+
+The catalysts it finds are written to files ending in ".out". It also
+writes a pair of GIF files for each result which can be used to build
+a HTML page classifying and summarising its results:
+
+$ python ./mkhtml.py .
+
+The results produced by this stage are partial - they only contain
+active catalytic regions, not entire still lives. The program
+"mkstill" will assign values to the remaining unassigned cells to
+produce a finished pattern that can be viewed in Golly or other Life
+program:
+
+$ ./mkstill result000001-4.out 
+Best answer: 7
+Best answer: 5
+Best answer: 4
+Best answer: 2
+#P 5 2
+.*......
+..*.....
+***.....
+........
+....**..
+....*.*.
+......*.
+......**
+
+As a more interesting example I've also included the input file which
+found the snark reflector, as "inputs/snark.in".
+
+Happy hunting!
