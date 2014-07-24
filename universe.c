@@ -1,5 +1,5 @@
 #include <string.h>
-#include <values.h>
+#include <limits.h>
 #include <stdio.h>
 #include <assert.h>
 #include "lib.h"
@@ -306,7 +306,7 @@ void tile_find_bounds(tile *t, int *l, int *r, int *t_, int *b) {
 
 void generation_find_bounds(generation *g, int *l, int *r, int *t_, int *b) {
         tile *t;
-        int ll = MAXINT, rr = -MAXINT, tt = MAXINT, bb = -MAXINT;
+        int ll = INT_MAX, rr = -INT_MAX, tt = INT_MAX, bb = -INT_MAX;
 
         for(t = g->all_first; t; t = t->all_next) {
                 if(!(t->flags & (IS_LIVE | HAS_UNKNOWN_CELLS)))
